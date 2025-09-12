@@ -20,7 +20,7 @@ export default async function SignInPage({
             <div className="max-w-md w-full space-y-8">
                 <div>
                     <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-primary">
-                        <span className="text-2xl font-bold text-primary-content">CT</span>
+                        <img src="/logo.png" alt="Logo" className="h-10 w-10" />
                     </div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-base-content">
                         Entre na sua conta
@@ -141,15 +141,6 @@ export default async function SignInPage({
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="text-center">
-                        <p className="text-sm text-base-content/70">
-                            Novo por aqui?{" "}
-                            <a href="/auth/signup" className="link link-primary">
-                                Criar conta
-                            </a>
-                        </p>
                     </div>
                 </div>
             </div>

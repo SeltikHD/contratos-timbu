@@ -14,8 +14,12 @@ export default async function Header() {
                         className="flex items-center space-x-4 hover:opacity-80 transition-opacity"
                     >
                         <div className="avatar placeholder">
-                            <div className="bg-primary text-primary-content w-10 rounded-full">
-                                <span className="text-sm font-bold">CT</span>
+                            <div className="h-12 w-12 flex items-center justify-center rounded-full bg-primary">
+                                <img
+                                    src="/logo.png"
+                                    alt="Logo"
+                                    className="h-10 w-10 object-contain"
+                                />
                             </div>
                         </div>
                         <div>
@@ -144,11 +148,8 @@ export default async function Header() {
                             </>
                         ) : (
                             <div className="flex gap-2">
-                                <Link href="/auth/signin" className="btn btn-ghost">
-                                    Entrar
-                                </Link>
                                 <Link href="/auth/signin" className="btn btn-primary">
-                                    Criar Conta
+                                    Login
                                 </Link>
                             </div>
                         )}

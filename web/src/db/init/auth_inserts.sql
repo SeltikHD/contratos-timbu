@@ -1,15 +1,16 @@
 -- INSERTS PARA DADOS DE AUTENTICAÇÃO E USUÁRIOS
 -- Execute após criar as tabelas de autenticação
+-- Usando ON CONFLICT para evitar erros em re-execuções
 -- Inserir usuários de exemplo
 INSERT INTO users (
         id,
         name,
         email,
-        emailVerified,
+        "emailVerified",
         image,
         role,
-        createdAt,
-        updatedAt
+        "createdAt",
+        "updatedAt"
     )
 VALUES (
         'user_1_admin',
@@ -60,26 +61,26 @@ VALUES (
         'USER',
         NOW(),
         NOW()
-    );
+    ) ON CONFLICT (email) DO NOTHING;
 -- Inserir perfis dos usuários
 INSERT INTO profiles (
         id,
-        userId,
+        "userId",
         bio,
         company,
         location,
         website,
         phone,
-        birthDate,
+        "birthDate",
         linkedin,
         github,
         theme,
         language,
         timezone,
-        emailNotifications,
-        pushNotifications,
-        createdAt,
-        updatedAt
+        "emailNotifications",
+        "pushNotifications",
+        "createdAt",
+        "updatedAt"
     )
 VALUES (
         'profile_1',
@@ -175,15 +176,15 @@ VALUES (
         TRUE,
         NOW(),
         NOW()
-    );
+    ) ON CONFLICT ("userId") DO NOTHING;
 -- Associar usuários aos projetos existentes
 INSERT INTO user_projects (
-        userId,
-        codProjeto,
+        "userId",
+        "codProjeto",
         role,
         permissions,
-        createdAt,
-        updatedAt
+        "createdAt",
+        "updatedAt"
     )
 VALUES -- João (Admin) - Owner de vários projetos
     (
@@ -461,18 +462,18 @@ VALUES -- João (Admin) - Owner de vários projetos
         ARRAY ['read'],
         NOW(),
         NOW()
-    );
+    ) ON CONFLICT ("userId", "codProjeto") DO NOTHING;
 -- Inserir logs de atividades de exemplo
 INSERT INTO activity_logs (
-        userId,
+        "userId",
         action,
         resource,
-        resourceId,
+        "resourceId",
         description,
         metadata,
-        ipAddress,
-        userAgent,
-        createdAt
+        "ipAddress",
+        "userAgent",
+        "createdAt"
     )
 VALUES (
         'user_1_admin',
@@ -586,11 +587,11 @@ VALUES (
     );
 -- Inserir algumas sessões ativas (para demonstração - normalmente criadas pelo NextAuth)
 INSERT INTO sessions (
-        sessionToken,
-        userId,
+        "sessionToken",
+        "userId",
         expires,
-        createdAt,
-        updatedAt
+        "createdAt",
+        "updatedAt"
     )
 VALUES (
         'session_token_admin_123',
@@ -615,17 +616,17 @@ VALUES (
     );
 -- Inserir contas OAuth de exemplo (normalmente criadas pelo NextAuth)
 INSERT INTO accounts (
-        userId,
+        "userId",
         type,
         provider,
-        providerAccountId,
+        "providerAccountId",
         access_token,
         expires_at,
         token_type,
         scope,
         id_token,
-        createdAt,
-        updatedAt
+        "createdAt",
+        "updatedAt"
     )
 VALUES (
         'user_1_admin',
@@ -687,4 +688,3 @@ VALUES (
         'verification_token_carlos_456',
         NOW() + INTERVAL '1 day'
     );
-COMMIT;

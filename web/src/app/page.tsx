@@ -26,14 +26,6 @@ export default async function Home() {
                     <ProjectCarousel projects={projects} />
                 </div>
             </main>
-
-            {/* Footer */}
-            <footer className="footer footer-center bg-base-300 text-base-content p-6 mt-12">
-                <aside>
-                    <p className="font-semibold">Contratos Timbu</p>
-                    <p>Sistema de Gestão de Contratos - {new Date().getFullYear()}</p>
-                </aside>
-            </footer>
         </div>
     );
 }

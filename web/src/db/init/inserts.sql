@@ -1,5 +1,5 @@
 -- INSERTS GERADOS AUTOMATICAMENTE (PostgreSQL)
---BEGIN;
+-- Usando ON CONFLICT para evitar erros em re-execuções
 INSERT INTO projetos (codProjeto, nome, dataInicio, dataEncerramento, valor, situacao) VALUES (1, 'Projeto 0001 - Transporte', '2022-04-18', '2023-02-01', 905812.96, '3');
 INSERT INTO projetos (codProjeto, nome, dataInicio, dataEncerramento, valor, situacao) VALUES (2, 'Projeto 0002 - Infra', '2024-10-27', '2024-12-24', 233645.83, '5');
 INSERT INTO projetos (codProjeto, nome, dataInicio, dataEncerramento, valor, situacao) VALUES (3, 'Projeto 0003 - Infra', '2023-09-24', '2024-09-14', 1534222.42, '5');
@@ -10163,4 +10163,3 @@ INSERT INTO itens_contrato (numContrato, codLancamento, dataLancamento, numParce
 INSERT INTO itens_contrato (numContrato, codLancamento, dataLancamento, numParcela, valorParcela, dataVencimento, valorPago, dataPagamento, situacao) VALUES ('0881/2024', 1757, '2024-09-09', 1, 3678.54, '2024-10-09', 3678.54, '2024-10-09', '3');
 INSERT INTO itens_contrato (numContrato, codLancamento, dataLancamento, numParcela, valorParcela, dataVencimento, valorPago, dataPagamento, situacao) VALUES ('0881/2024', 1758, '2024-09-09', 2, 3782.12, '2024-11-08', 3782.12, '2024-11-08', '3');
 INSERT INTO itens_contrato (numContrato, codLancamento, dataLancamento, numParcela, valorParcela, dataVencimento, valorPago, dataPagamento, situacao) VALUES ('0881/2024', 1759, '2024-09-09', 3, 3504.91, '2024-12-08', 3504.91, '2024-12-08', '3');
---COMMIT;

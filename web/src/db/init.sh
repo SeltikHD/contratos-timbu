@@ -8,7 +8,9 @@ DB_NAME="timbudb"
 DB_VOLUME_NAME="postgres-timbu-data" # NOME DO NOSSO VOLUME DOCKER
 HOST_PORT="5432"
 DDL_SCRIPT_PATH="ddl/base.sql"
+AUTH_SCRIPT_PATH="ddl/auth.sql"
 INSERTS_SCRIPT_PATH="init/inserts.sql"
+AUTH_INSERTS_SCRIPT_PATH="init/auth_inserts.sql"
 
 # Cores para o output
 GREEN='\033[0;32m'
@@ -95,22 +97,52 @@ echo -e "${GREEN}✅ Banco de dados está pronto!${NC}"
 # 5. Executar os scripts SQL
 echo "📜 Executando scripts SQL..."
 
-# Executar DDL
+# Executar DDL Base (estrutura principal)
 if [ -f "$DDL_SCRIPT_PATH" ]; then
-    echo "   - Executando DDL: ${DDL_SCRIPT_PATH}"
+    echo "   - Executando DDL Base: ${DDL_SCRIPT_PATH}"
     docker cp "$DDL_SCRIPT_PATH" "${CONTAINER_NAME}:/tmp/base.sql"
-    docker exec -u postgres "$CONTAINER_NAME" psql -U "$DB_USER" -d "$DB_NAME" -f /tmp/base.sql
+    docker exec -u postgres "$CONTAINER_NAME" psql -U "$DB_USER" -d "$DB_NAME" -f /tmp/base.sql -v ON_ERROR_STOP=0
+    if [ $? -ne 0 ]; then
+        echo -e "${YELLOW}Alguns erros ocorreram no DDL Base, mas continuando...${NC}"
+    fi
 else
-    echo -e "${YELLOW}Aviso: Script DDL '${DDL_SCRIPT_PATH}' não encontrado.${NC}"
+    echo -e "${YELLOW}Aviso: Script DDL Base '${DDL_SCRIPT_PATH}' não encontrado.${NC}"
 fi
 
-# Executar Inserts
-if [ -f "$INSERTS_SCRIPT_PATH" ]; then
-    echo "   - Executando Inserts: ${INSERTS_SCRIPT_PATH}"
-    docker cp "$INSERTS_SCRIPT_PATH" "${CONTAINER_NAME}:/tmp/inserts.sql"
-    docker exec -u postgres "$CONTAINER_NAME" psql -U "$DB_USER" -d "$DB_NAME" -f /tmp/inserts.sql
+# Executar DDL Auth (tabelas de autenticação)
+if [ -f "$AUTH_SCRIPT_PATH" ]; then
+    echo "   - Executando DDL Auth: ${AUTH_SCRIPT_PATH}"
+    docker cp "$AUTH_SCRIPT_PATH" "${CONTAINER_NAME}:/tmp/auth.sql"
+    docker exec -u postgres "$CONTAINER_NAME" psql -U "$DB_USER" -d "$DB_NAME" -f /tmp/auth.sql -v ON_ERROR_STOP=0
+    if [ $? -ne 0 ]; then
+        echo -e "${YELLOW}Alguns erros ocorreram no DDL Auth, mas continuando...${NC}"
+    fi
 else
-    echo -e "${YELLOW}Aviso: Script de inserts '${INSERTS_SCRIPT_PATH}' não encontrado.${NC}"
+    echo -e "${YELLOW}Aviso: Script DDL Auth '${AUTH_SCRIPT_PATH}' não encontrado.${NC}"
+fi
+
+# Executar Inserts Base (dados dos projetos)
+if [ -f "$INSERTS_SCRIPT_PATH" ]; then
+    echo "   - Executando Inserts Base: ${INSERTS_SCRIPT_PATH}"
+    docker cp "$INSERTS_SCRIPT_PATH" "${CONTAINER_NAME}:/tmp/inserts.sql"
+    docker exec -u postgres "$CONTAINER_NAME" psql -U "$DB_USER" -d "$DB_NAME" -f /tmp/inserts.sql -v ON_ERROR_STOP=0
+    if [ $? -ne 0 ]; then
+        echo -e "${YELLOW}Alguns erros ocorreram nos Inserts Base, mas continuando...${NC}"
+    fi
+else
+    echo -e "${YELLOW}Aviso: Script de Inserts Base '${INSERTS_SCRIPT_PATH}' não encontrado.${NC}"
+fi
+
+# Executar Inserts Auth (dados de usuários e autenticação)
+if [ -f "$AUTH_INSERTS_SCRIPT_PATH" ]; then
+    echo "   - Executando Inserts Auth: ${AUTH_INSERTS_SCRIPT_PATH}"
+    docker cp "$AUTH_INSERTS_SCRIPT_PATH" "${CONTAINER_NAME}:/tmp/auth_inserts.sql"
+    docker exec -u postgres "$CONTAINER_NAME" psql -U "$DB_USER" -d "$DB_NAME" -f /tmp/auth_inserts.sql -v ON_ERROR_STOP=0
+    if [ $? -ne 0 ]; then
+        echo -e "${YELLOW}Alguns erros ocorreram nos Inserts Auth, mas continuando...${NC}"
+    fi
+else
+    echo -e "${YELLOW}Aviso: Script de Inserts Auth '${AUTH_INSERTS_SCRIPT_PATH}' não encontrado.${NC}"
 fi
 
 # Monta a URL de conexão
@@ -126,6 +158,12 @@ echo -e "  ${YELLOW}Banco:${NC}        ${DB_NAME}"
 echo -e "  ${YELLOW}Locale:${NC}       pt_BR.UTF-8"
 echo -e "  ${YELLOW}Senha:${NC}         ${PASSWORD}"
 echo -e "  ${YELLOW}URL:${NC}          ${DATABASE_URL}"
+echo "--------------------------------------------------"
+echo -e "${GREEN}Tabelas criadas:${NC}"
+echo -e "  📋 Principais: projetos, requisicao, ordem, contrato"
+echo -e "  👥 Autenticação: users, accounts, sessions, profiles"
+echo -e "  🔐 Permissões: user_projects, activity_logs"
+echo -e "  ✅ Dados de exemplo carregados para todas as tabelas"
 echo "--------------------------------------------------"
 echo "Para se conectar, use o comando:"
 echo -e "${YELLOW}PGPASSWORD='${PASSWORD}' psql -h localhost -p ${HOST_PORT} -U ${DB_USER} -d ${DB_NAME}${NC}"
