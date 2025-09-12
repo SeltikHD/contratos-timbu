@@ -57,22 +57,6 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
         setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
     };
 
-    // Função para prevenir comportamento padrão dos botões
-    const handleNavigation = (action: () => void) => (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-        // Previne scroll e blur
-        event.currentTarget.blur();
-        // Executa a ação
-        action();
-        // Força o foco a permanecer no lugar
-        setTimeout(() => {
-            if (document.activeElement instanceof HTMLElement) {
-                document.activeElement.blur();
-            }
-        }, 0);
-    };
-
     // Navegação por teclado
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -140,19 +124,8 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
                 {projects.length > itemsPerView && (
                     <>
                         <button
-                            type="button"
-                            onClick={handleNavigation(prevSlide)}
-                            className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10 btn btn-sm sm:btn-md btn-circle btn-outline bg-base-100/80 backdrop-blur-sm hover:bg-primary hover:text-primary-content border-base-300 shadow-lg no-animation focus:scale-100 active:scale-100"
-                            style={{ 
-                                userSelect: 'none',
-                                WebkitUserSelect: 'none',
-                                touchAction: 'manipulation',
-                                outline: 'none',
-                                boxShadow: 'none'
-                            }}
-                            onMouseDown={(e) => e.preventDefault()}
-                            onFocus={(e) => e.preventDefault()}
-                            tabIndex={-1}
+                            onClick={prevSlide}
+                            className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10 btn btn-sm sm:btn-md btn-circle btn-outline bg-base-100/80 backdrop-blur-sm hover:bg-primary hover:text-primary-content border-base-300 shadow-lg"
                             aria-label="Projeto anterior"
                         >
                             <svg
@@ -171,19 +144,8 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
                             </svg>
                         </button>
                         <button
-                            type="button"
-                            onClick={handleNavigation(nextSlide)}
-                            className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10 btn btn-sm sm:btn-md btn-circle btn-outline bg-base-100/80 backdrop-blur-sm hover:bg-primary hover:text-primary-content border-base-300 shadow-lg no-animation focus:scale-100 active:scale-100"
-                            style={{ 
-                                userSelect: 'none',
-                                WebkitUserSelect: 'none',
-                                touchAction: 'manipulation',
-                                outline: 'none',
-                                boxShadow: 'none'
-                            }}
-                            onMouseDown={(e) => e.preventDefault()}
-                            onFocus={(e) => e.preventDefault()}
-                            tabIndex={-1}
+                            onClick={nextSlide}
+                            className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10 btn btn-sm sm:btn-md btn-circle btn-outline bg-base-100/80 backdrop-blur-sm hover:bg-primary hover:text-primary-content border-base-300 shadow-lg"
                             aria-label="Próximo projeto"
                         >
                             <svg
@@ -359,19 +321,12 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
                     {Array.from({ length: totalSlides }, (_, i) => (
                         <button
                             key={i}
-                            type="button"
-                            onClick={handleNavigation(() => goToSlide(i))}
+                            onClick={() => goToSlide(i)}
                             className={`w-3 h-3 rounded-full transition-all duration-300 ${
                                 i === currentIndex
                                     ? "bg-primary scale-125 shadow-lg"
                                     : "bg-base-300 hover:bg-base-content/30"
                             }`}
-                            style={{ 
-                                userSelect: 'none',
-                                WebkitUserSelect: 'none',
-                                touchAction: 'manipulation'
-                            }}
-                            onMouseDown={(e) => e.preventDefault()}
                             aria-label={`Ir para slide ${i + 1}`}
                         />
                     ))}

@@ -4,16 +4,36 @@ import { useState } from "react";
 
 interface ProfileEditFormProps {
     readonly userProfile: any;
+    readonly isOpen?: boolean;
+    readonly onOpenChange?: (open: boolean) => void;
+    readonly showButton?: boolean;
 }
 
-export function ProfileEditForm({ userProfile }: ProfileEditFormProps) {
-    const [isOpen, setIsOpen] = useState(false);
+export function ProfileEditForm({ 
+    userProfile, 
+    isOpen: externalIsOpen, 
+    onOpenChange, 
+    showButton = true 
+}: ProfileEditFormProps) {
+    const [internalIsOpen, setInternalIsOpen] = useState(false);
+    
+    // Use external state if provided, otherwise use internal state
+    const isOpen = externalIsOpen ?? internalIsOpen;
+    const setIsOpen = (open: boolean) => {
+        if (onOpenChange) {
+            onOpenChange(open);
+        } else {
+            setInternalIsOpen(open);
+        }
+    };
 
     return (
         <>
-            <button className="btn btn-primary" onClick={() => setIsOpen(true)}>
-                Editar Perfil
-            </button>
+            {showButton && (
+                <button className="btn btn-primary" onClick={() => setIsOpen(true)}>
+                    Editar Perfil
+                </button>
+            )}
 
             {isOpen && (
                 <div className="modal modal-open">
