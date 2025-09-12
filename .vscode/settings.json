@@ -32,6 +32,8 @@
         "**/pnpm*": true,
         "**/LICENSE*": true,
         "**/.prettierignore*": true,
+        "**/postgres-data": true,
+        "**/drizzle": false
     },
     "files.watcherExclude": {
         "**/node_modules/**": true,
@@ -68,7 +70,9 @@
         "**/build": true,
         "**/coverage": true,
         "**/.cache": true,
-        "**/pnpm-lock.yaml": true
+        "**/pnpm-lock.yaml": true,
+        "**/postgres-data": true,
+        "**/drizzle": true
     },
     "tailwindCSS.includeLanguages": {
         "typescript": "html",

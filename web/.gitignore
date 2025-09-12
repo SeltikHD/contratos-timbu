@@ -95,3 +95,7 @@ pids
 # Temporary folders
 tmp/
 temp/
+
+# PostgreSQL Docker data directory and DB
+postgres-data/
+drizzle/
