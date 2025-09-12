@@ -1,0 +1,21 @@
+# Prettier ignore patterns
+node_modules/
+.next/
+out/
+dist/
+build/
+.env*
+*.log
+.DS_Store
+coverage/
+.nyc_output/
+*.tgz
+*.tar.gz
+.cache/
+.parcel-cache/
+.vscode/
+.idea/
+*.min.js
+*.min.css
+public/
+pnpm-lock.yaml

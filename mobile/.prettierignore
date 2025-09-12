@@ -1,0 +1,10 @@
+node_modules
+.expo
+build
+dist
+coverage
+*.min.js
+*.min.css
+pnpm-lock.yaml
+android
+ios
