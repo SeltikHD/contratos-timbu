@@ -6,7 +6,6 @@ import { db } from "@/lib/db";
 import { eq, sql } from "drizzle-orm";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { ProfilePageClient } from "./profile-client";
 
 export default async function ProfilePage() {
     const session = await auth();
@@ -73,13 +72,70 @@ export default async function ProfilePage() {
         .limit(5);
 
     return (
-        <ProfilePageClient 
-            userProfile={userProfile}
-            stats={stats}
-            recentProjects={recentProjects}
-        />
-    );
-}
+        <div className="min-h-screen bg-base-200">
+            {/* Header com avatar e info básica */}
+            <div className="bg-gradient-to-r from-primary to-secondary text-primary-content">
+                <div className="container mx-auto px-6 py-8">
+                    <div className="flex flex-col md:flex-row items-center gap-6">
+                        <div className="avatar">
+                            <div className="w-24 h-24 rounded-full border-4 border-white shadow-lg">
+                                {userProfile.user.image ? (
+                                    <Image
+                                        src={userProfile.user.image}
+                                        alt={userProfile.user.name || "Avatar"}
+                                        width={96}
+                                        height={96}
+                                        className="rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="bg-base-200 flex items-center justify-center text-base-content text-2xl font-bold">
+                                        {userProfile.user.name?.charAt(0)?.toUpperCase() || "U"}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="flex-1 text-center md:text-left">
+                            <h1 className="text-3xl font-bold">{userProfile.user.name}</h1>
+                            <p className="text-primary-content/80 text-lg">
+                                {userProfile.user.email}
+                            </p>
+                            {userProfile.profile?.bio && (
+                                <p className="mt-2 text-primary-content/90">
+                                    {userProfile.profile.bio}
+                                </p>
+                            )}
+                            <div className="flex flex-wrap gap-2 mt-3 justify-center md:justify-start">
+                                <div className="badge badge-ghost text-primary-content">
+                                    {userProfile.user.role === "ADMIN"
+                                        ? "Administrador"
+                                        : "Usuário"}
+                                </div>
+                                {userProfile.user.emailVerified && (
+                                    <div className="badge badge-success">Email verificado</div>
+                                )}
+                                {userProfile.profile?.company && (
+                                    <div className="badge badge-ghost text-primary-content">
+                                        {userProfile.profile.company}
+                                    </div>
+                                )}
+                                {userProfile.profile?.location && (
+                                    <div className="badge badge-ghost text-primary-content">
+                                        📍 {userProfile.profile.location}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="flex gap-2">
+                            <button className="btn btn-ghost text-primary-content">
+                                Editar Perfil
+                            </button>
+                            <SignOutButton />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div className="container mx-auto px-6 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
